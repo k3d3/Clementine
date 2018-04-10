@@ -22,6 +22,7 @@
 #include "core/utilities.h"
 
 #include <QSettings>
+#include <QDebug>
 
 #ifdef HAVE_MOODBAR
 #include "moodbar/moodbarproxystyle.h"

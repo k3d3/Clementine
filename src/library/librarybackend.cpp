@@ -71,6 +71,12 @@ void LibraryBackend::IncrementPlayCountAsync(int id) {
                              Q_ARG(int, id));
 }
 
+void LibraryBackend::IncrementPlayTimeAsync(int id) {
+  qDebug() << "increment async" << id;
+  metaObject()->invokeMethod(this, "IncrementPlayTime", Qt::QueuedConnection,
+                             Q_ARG(int, id));
+}
+
 void LibraryBackend::IncrementSkipCountAsync(int id, float progress) {
   metaObject()->invokeMethod(this, "IncrementSkipCount", Qt::QueuedConnection,
                              Q_ARG(int, id), Q_ARG(float, progress));
@@ -1130,6 +1136,29 @@ void LibraryBackend::IncrementPlayCount(int id) {
   if (db_->CheckErrors(q)) return;
 
   Song new_song = GetSongById(id, db);
+  emit SongsStatisticsChanged(SongList() << new_song);
+}
+
+void LibraryBackend::IncrementPlayTime(int id) {
+  qDebug() << "increment playtime" << id << songs_table_;
+  if (id == -1) return;
+
+  QMutexLocker l(db_->Mutex());
+  QSqlDatabase db(db_->Connect());
+
+  QSqlQuery q(QString(
+                  "UPDATE %1 SET playtime = playtime + 40000000"
+                  " WHERE ROWID = :id").arg(songs_table_),
+              db);
+  q.bindValue(":id", id);
+  q.exec();
+  if (db_->CheckErrors(q)) {
+      qDebug() << "there was an error";
+      return;
+  }
+
+  Song new_song = GetSongById(id, db);
+  qDebug() << new_song.playtime();
   emit SongsStatisticsChanged(SongList() << new_song);
 }
 

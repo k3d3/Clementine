@@ -1515,6 +1515,7 @@ void MainWindow::UpdateTrackPosition() {
 
 void MainWindow::UpdateTrackSliderPosition() {
   PlaylistItemPtr item(app_->player()->GetCurrentItem());
+  app_->playlist_manager()->library_backend()->IncrementPlayTimeAsync(item->Metadata().id());
 
   const int slider_position = std::floor(
       float(app_->player()->engine()->position_nanosec()) / kNsecPerMsec);

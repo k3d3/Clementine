@@ -115,6 +115,7 @@ class Playlist : public QAbstractListModel {
     Column_Performer,
     Column_Grouping,
     Column_OriginalYear,
+    Column_PlayTime,
     ColumnCount
   };
 

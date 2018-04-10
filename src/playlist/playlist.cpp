@@ -302,6 +302,8 @@ QVariant Playlist::data(const QModelIndex& index, int role) const {
           return song.rating();
         case Column_PlayCount:
           return song.playcount();
+        case Column_PlayTime:
+          return song.playtime();
         case Column_SkipCount:
           return song.skipcount();
         case Column_LastPlayed:
@@ -1354,6 +1356,8 @@ QString Playlist::column_name(Column column) {
       return tr("Rating");
     case Column_PlayCount:
       return tr("Play count");
+    case Column_PlayTime:
+      return tr("Play time");
     case Column_SkipCount:
       return tr("Skip count");
     case Column_LastPlayed:
@@ -1397,6 +1401,7 @@ QString Playlist::abbreviated_column_name(Column column) {
   switch (column) {
     case Column_Disc:
     case Column_PlayCount:
+    case Column_PlayTime:
     case Column_SkipCount:
     case Column_Track:
       return QString("%1#").arg(column_name[0]);

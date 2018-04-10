@@ -194,6 +194,7 @@ class LibraryBackend : public LibraryBackendInterface {
   SongList GetAllSongs();
 
   void IncrementPlayCountAsync(int id);
+  void IncrementPlayTimeAsync(int id);
   void IncrementSkipCountAsync(int id, float progress);
   void ResetStatisticsAsync(int id);
   void UpdateSongRatingAsync(int id, float rating);
@@ -215,6 +216,7 @@ class LibraryBackend : public LibraryBackendInterface {
   void ForceCompilation(const QString& album, const QList<QString>& artists,
                         bool on);
   void IncrementPlayCount(int id);
+  void IncrementPlayTime(int id);
   void IncrementSkipCount(int id, float progress);
   void ResetStatistics(int id);
   void UpdateSongRating(int id, float rating);

@@ -263,7 +263,30 @@ QString LengthItemDelegate::displayText(const QVariant& value,
   bool ok = false;
   qint64 nanoseconds = value.toLongLong(&ok);
 
-  if (ok && nanoseconds > 0) return Utilities::PrettyTimeNanosec(nanoseconds);
+  if (ok && nanoseconds > 0) {
+      qDebug() << "okay and > 0";
+      QString ret(Utilities::PrettyTimeNanosec(nanoseconds));
+      qDebug() << "LengthItemDelegate" << ret;
+      return ret;
+  } else {
+      qDebug() << "ok/nanoseconds" << ok << nanoseconds;
+  }
+  return QString::null;
+}
+
+QString PlayTimeItemDelegate::displayText(const QVariant& value,
+                                        const QLocale&) const {
+  bool ok = false;
+  qint64 nanoseconds = value.toLongLong(&ok);
+
+  if (ok && nanoseconds > 0) {
+      qDebug() << "okay and > 0";
+      QString ret(Utilities::PrettyTimeNanosec(nanoseconds));
+      qDebug() << "PlayTimeItemDelegate" << ret;
+      return ret;
+  } else {
+      qDebug() << "ok/nanoseconds" << ok << nanoseconds;
+  }
   return QString::null;
 }
 

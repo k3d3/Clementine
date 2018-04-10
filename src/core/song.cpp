@@ -114,7 +114,8 @@ const QStringList Song::kColumns = QStringList() << "title"
                                                  << "grouping"
                                                  << "lyrics"
                                                  << "originalyear"
-                                                 << "effective_originalyear";
+                                                 << "effective_originalyear"
+                                                 << "playtime";
 
 const QString Song::kColumnSpec = Song::kColumns.join(", ");
 const QString Song::kBindSpec =
@@ -177,6 +178,7 @@ struct Song::Private : public QSharedData {
 
   float rating_;
   int playcount_;
+  qint64 playtime_;
   int skipcount_;
   int lastplayed_;
   int score_;
@@ -242,6 +244,7 @@ Song::Private::Private()
       album_id_(-1),
       rating_(-1.0),
       playcount_(0),
+      playtime_(0),
       skipcount_(0),
       lastplayed_(-1),
       score_(0),
@@ -306,6 +309,7 @@ bool Song::is_compilation() const {
 }
 float Song::rating() const { return d->rating_; }
 int Song::playcount() const { return d->playcount_; }
+qint64 Song::playtime() const { return d->playtime_; }
 int Song::skipcount() const { return d->skipcount_; }
 int Song::lastplayed() const { return d->lastplayed_; }
 int Song::score() const { return d->score_; }
@@ -379,6 +383,7 @@ void Song::set_forced_compilation_off(bool v) {
 }
 void Song::set_rating(float v) { d->rating_ = v; }
 void Song::set_playcount(int v) { d->playcount_ = v; }
+void Song::set_playtime(qint64 v) { d->playtime_ = v; }
 void Song::set_skipcount(int v) { d->skipcount_ = v; }
 void Song::set_lastplayed(int v) { d->lastplayed_ = v; }
 void Song::set_score(int v) { d->score_ = qBound(0, v, 100); }
@@ -544,6 +549,8 @@ void Song::InitFromProtobuf(const pb::tagreader::SongMetadata& pb) {
     d->playcount_ = pb.playcount();
   }
 
+  // PLAYTIME
+
   InitArtManual();
 }
 
@@ -626,6 +633,7 @@ void Song::InitFromQuery(const SqlRow& q, bool reliable_metadata, int col) {
 
   d->filetype_ = FileType(q.value(col + 23).toInt());
   d->playcount_ = q.value(col + 24).isNull() ? 0 : q.value(col + 24).toInt();
+  d->playtime_ = q.value(col + 43).toLongLong();
   d->lastplayed_ = toint(col + 25);
   d->rating_ = tofloat(col + 26);
 
@@ -954,6 +962,7 @@ void Song::BindToQuery(QSqlQuery* query) const {
 
   query->bindValue(":filetype", d->filetype_);
   query->bindValue(":playcount", d->playcount_);
+  query->bindValue(":playtime", intval(d->playtime_));
   query->bindValue(":lastplayed", intval(d->lastplayed_));
   query->bindValue(":rating", intval(d->rating_));
 
@@ -1160,6 +1169,7 @@ void Song::ToXesam(QVariantMap* map) const {
   AddMetadata("xesam:audioBPM", static_cast<int>(bpm()), map);
   AddMetadataAsList("xesam:composer", composer(), map);
   AddMetadata("xesam:useCount", playcount(), map);
+  // PLAYTIME
   AddMetadata("xesam:autoRating", score(), map);
   if (rating() != -1.0) {
     AddMetadata("xesam:userRating", rating(), map);

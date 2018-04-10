@@ -229,6 +229,8 @@ void PlaylistView::SetItemDelegates(LibraryBackend* backend) {
       new TagCompletionItemDelegate(this, backend, Playlist::Column_Grouping));
   setItemDelegateForColumn(Playlist::Column_Length,
                            new LengthItemDelegate(this));
+  setItemDelegateForColumn(Playlist::Column_PlayTime,
+                           new PlayTimeItemDelegate(this));
   setItemDelegateForColumn(Playlist::Column_Filesize,
                            new SizeItemDelegate(this));
   setItemDelegateForColumn(Playlist::Column_Filetype,
@@ -350,6 +352,7 @@ void PlaylistView::LoadGeometry() {
       header_->HideSection(Playlist::Column_Grouping);
       header_->HideSection(Playlist::Column_Rating);
       header_->HideSection(Playlist::Column_PlayCount);
+      header_->HideSection(Playlist::Column_PlayTime);
       header_->HideSection(Playlist::Column_SkipCount);
       header_->HideSection(Playlist::Column_LastPlayed);
 
@@ -383,6 +386,7 @@ void PlaylistView::LoadGeometry() {
   if (state_version < 6) {
     header_->HideSection(Playlist::Column_Performer);
     header_->HideSection(Playlist::Column_Grouping);
+    header_->HideSection(Playlist::Column_PlayTime);
   }
 
   // Make sure at least one column is visible
@@ -1232,6 +1236,7 @@ ColumnAlignmentMap PlaylistView::DefaultColumnAlignment() {
               ret[Playlist::Column_Samplerate] =
                   ret[Playlist::Column_Filesize] =
                       ret[Playlist::Column_PlayCount] =
+                        ret[Playlist::Column_PlayTime] =
                           ret[Playlist::Column_SkipCount] =
                               ret[Playlist::Column_OriginalYear] =
                                   (Qt::AlignRight | Qt::AlignVCenter);

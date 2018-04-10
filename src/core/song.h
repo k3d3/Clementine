@@ -183,6 +183,7 @@ class Song {
   bool is_compilation() const;
   float rating() const;
   int playcount() const;
+  qint64 playtime() const;
   int skipcount() const;
   int lastplayed() const;
   int score() const;
@@ -280,6 +281,7 @@ class Song {
   void set_forced_compilation_off(bool v);
   void set_rating(float v);
   void set_playcount(int v);
+  void set_playtime(qint64 v);
   void set_skipcount(int v);
   void set_lastplayed(int v);
   void set_score(int v);

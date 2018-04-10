@@ -438,12 +438,19 @@ void PlaylistManager::SelectionChanged(const QItemSelection& selection) {
 void PlaylistManager::SongsDiscovered(const SongList& songs) {
   // Some songs might've changed in the library, let's update any playlist
   // items we have that match those songs
+  qDebug() << "SongsDiscovered";
 
   for (const Song& song : songs) {
+    qDebug() << "song" << song.id();
+    qDebug() << "dirid" << song.directory_id();
     for (const Data& data : playlists_) {
       PlaylistItemList items = data.p->library_items_by_id(song.id());
+      qDebug() << "items len" << items.count();
       for (PlaylistItemPtr item : items) {
+        qDebug() << "new item";
+        qDebug() << item->Metadata().directory_id();
         if (item->Metadata().directory_id() != song.directory_id()) continue;
+        qDebug() << "survived continue";
         static_cast<LibraryPlaylistItem*>(item.get())->SetMetadata(song);
         data.p->ItemChanged(item);
       }

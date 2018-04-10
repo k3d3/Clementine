@@ -83,6 +83,12 @@ class LengthItemDelegate : public PlaylistDelegateBase {
   QString displayText(const QVariant& value, const QLocale& locale) const;
 };
 
+class PlayTimeItemDelegate : public PlaylistDelegateBase {
+ public:
+  PlayTimeItemDelegate(QObject* parent) : PlaylistDelegateBase(parent) {}
+  QString displayText(const QVariant& value, const QLocale& locale) const;
+};
+
 class SizeItemDelegate : public PlaylistDelegateBase {
  public:
   SizeItemDelegate(QObject* parent) : PlaylistDelegateBase(parent) {}
